@@ -1,0 +1,58 @@
+    /* Home.module.css */
+
+    /* Main container with background image */
+    .container {
+        background-image: url('/images/trees.jpeg'); /* Path to your background image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 2rem;
+    }
+    
+    /* Logo container to position the logo at the top */
+    .logoContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Logo styling - circular and centered */
+    .logo {
+        width: 120px; /* Adjust size as needed */
+        height: 120px;
+        border-radius: 50%; /* Makes the logo circular */
+        background-color: rgba(255, 255, 255, 0.1); /* Optional frosted effect */
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    }
+    
+    /* Title styling */
+    .title {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Optional styling for the Signup component */
+    .signupContainer {
+        margin-top: 2rem;
+        width: 100%;
+        max-width: 600px;
+        padding: 1.5rem;
+        background-color: rgba(255, 255, 255, 0.15); /* Frosted glass effect */
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+        
