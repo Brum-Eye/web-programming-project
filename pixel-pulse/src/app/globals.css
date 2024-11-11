@@ -1,3 +1,4 @@
+/* globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,13 +15,16 @@
   }
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
-  background-image: url('/images/trees.jpeg') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
+.pixelated-text {
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  font-size: 16px; /* Adjust as needed */
+  letter-spacing: 1px;
+  color: var(--foreground);
+}

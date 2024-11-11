@@ -14,43 +14,30 @@ import styles from './Signup.module.css';
     }
 
     export default function Signup({ onAddUser }: SignupProps) {
-    const [name, setName] = useState('');
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
 
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-
-        const newUser = {
-        id: Math.random(),
-        name,
-        username,
-        email,
-        password,
-        };
-
-        if (onAddUser) onAddUser(newUser);
-
-        // Reset input fields after submission
-        setName('');
+        if (onAddUser) {
+        onAddUser({
+            id: Math.random(),
+            name: '',
+            username,
+            email: '',
+            password,
+        });
+        }
         setUsername('');
-        setEmail('');
         setPassword('');
     };
 
     return (
         <div className={styles.container}>
         <div className={styles.formWrapper}>
-            <h1 className={styles.title}>Signup</h1>
+            <h1 className={styles.title}>Pixel Pulse Login</h1>
             <form onSubmit={submitHandler}>
-            <input
-                className={styles.input}
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
             <input
                 className={styles.input}
                 type="text"
@@ -60,20 +47,29 @@ import styles from './Signup.module.css';
             />
             <input
                 className={styles.input}
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                className={styles.input}
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit" className={styles.button}>Sign Up</button>
+
+            <div className={styles.options}>
+                <label className={styles.checkboxContainer}>
+                <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span className={styles.checkboxLabel}>Remember Me</span>
+                </label>
+                <a href="#" className={styles.forgotPassword}>
+                Forgot Password
+                </a>
+            </div>
+
+            <button type="submit" className={styles.button}>Login</button>
             </form>
+            <p className={styles.signupLink}>Sign Up</p>
         </div>
         </div>
     );

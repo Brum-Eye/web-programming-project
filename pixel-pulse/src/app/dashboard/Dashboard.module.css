@@ -1,0 +1,117 @@
+    /* Dashboard.module.css */
+    /* Dashboard.module.css */
+
+    .dashboardContainer {
+        background-image: url('/images/dash.jpg'); /* Specific to the dashboard */
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333;
+        font-family: 'PixelFont', sans-serif; /* Adjust as necessary */
+    }
+    
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+        padding: 0 2rem;
+    }
+    
+    .title {
+        font-size: 2.5rem;
+        color: #333;
+        margin: 0;
+    }
+    
+    .logoutButton {
+        background-color: white;
+        color: black;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .newGameButton {
+        background-color: #ddd;
+        color: #333;
+        font-size: 1.2rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
+        border: 2px solid #aaa;
+        cursor: pointer;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .gamesSection {
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        max-width: 1100px;
+        width: 100%;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+    
+    .gamesTitle {
+        font-size: 1.8rem;
+        color: #666;
+        margin-bottom: 1rem;
+        margin-left: 1rem;
+    }
+    
+    .gamesContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .gameCard {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: left;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .gameTitle {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .gameDescription {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0.5rem 0;
+    }
+    
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+    
+    .editButton {
+        color: #007bff;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    
+    .deleteButton {
+        color: #ff4d4d;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    

@@ -1,0 +1,59 @@
+    /* LogGame.module.css */
+    .pageBackground {
+        background-image: url('/images/dash.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .logGameContainer {
+        background-color: rgba(255, 255, 255, 0.85); /* Frosted effect */
+        border-radius: 10px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+    
+    .title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        font-family: 'Press Start 2P', Arial, sans-serif;
+    }
+    
+    .formField {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        font-family: 'Press Start 2P', Arial, sans-serif;
+    }
+    
+    .inputField {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    .starRating {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .submitButton {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #6a0dad;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: 'Press Start 2P', Arial, sans-serif;
+    }
+    
