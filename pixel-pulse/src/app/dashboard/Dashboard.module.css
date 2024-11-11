@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-
     .dashboardContainer {
-        background-image: url('/images/dash.jpg'); /* Specific to the dashboard */
+        background-image: url('/images/dash.jpg');
         background-size: cover;
         background-position: center;
         min-height: 100vh;

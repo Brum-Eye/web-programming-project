@@ -1,4 +1,3 @@
-    // Home.tsx
     "use client";
     import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -27,11 +26,11 @@ import Signup from './components/Signup';
 
     export default function Home() {
     const [users, setUsers] = useState<User[]>(USERS_INIT);
-    const router = useRouter(); // Initialize useRouter for navigation
+    const router = useRouter();
 
     const addUserHandler = (newUser: User) => {
         setUsers((prevUsers) => [...prevUsers, newUser]);
-        router.push('/dashboard'); // Redirect to the dashboard after sign-up
+        router.push('/dashboard');
     };
 
     return (

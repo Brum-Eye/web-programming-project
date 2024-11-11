@@ -1,4 +1,3 @@
-    // app/login/index.tsx
     import Login from '../components/Login';
 
     export default function LoginPage() {

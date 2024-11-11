@@ -8,8 +8,7 @@ import styles from './Login.module.css';
 
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log('Logging in:', { username, password });
+    console.log('Logging in:', { username, password });
     };
 
     return (

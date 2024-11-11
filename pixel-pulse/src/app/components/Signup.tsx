@@ -1,4 +1,4 @@
-    // Signup.tsx
+
     "use client";
     import { useState } from 'react';
 import styles from './Signup.module.css';
@@ -52,7 +52,6 @@ import styles from './Signup.module.css';
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-
             <div className={styles.options}>
                 <label className={styles.checkboxContainer}>
                 <input

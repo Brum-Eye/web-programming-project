@@ -19,12 +19,12 @@
 
 body {
   color: var(--foreground);
-  font-family: var(--pixel-font); /* Set pixel font globally for the body */
+  font-family: var(--pixel-font);
 }
 
 .pixelated-text {
-  font-family: var(--pixel-font); /* Use the pixel font variable here */
-  font-size: 16px; /* Adjust as needed */
+  font-family: var(--pixel-font);
+  font-size: 16px;
   letter-spacing: 1px;
   color: var(--foreground);
 }
