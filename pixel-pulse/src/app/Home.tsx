@@ -44,7 +44,7 @@ import Signup from './components/Signup';
             />
         </div>
 
-        <h1 className={styles.title}>Welcome to Pixel Pulse</h1>
+        <h1 className={`pixelated-text ${styles.title}`}>Welcome to Pixel Pulse</h1>
         <Signup onAddUser={addUserHandler} />
         </div>
     );

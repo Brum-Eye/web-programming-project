@@ -1,60 +1,58 @@
-    // src/app/dashboard/Dashboard.tsx
-    "use client";
+// Dashboard.tsx
+"use client";
 
-    import { useRouter } from "next/navigation";
-import { useState } from "react";
-import styles from "./Dashboard.module.css";
+import Link from 'next/link';
+import { useState } from 'react';
+import styles from './Dashboard.module.css';
 
-    export default function Dashboard() {
+export default function Dashboard() {
+    // Set the initial state for isLoggedIn (true means the user is "logged in")
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    // Sample items to display on the dashboard
     const [games, setGames] = useState([
-        {
-        title: "Game title",
-        description: "Here will be the game review and any additional information the user wants to include.",
-        },
-        {
-        title: "Game title",
-        description: "Here will be the game review and any additional information the user wants to include.",
-        },
+        { title: "Game title", description: "Here will be the game review and any additional information the user wants to include." },
+        { title: "Game title", description: "Here will be the game review and any additional information the user wants to include." },
     ]);
-
-    const router = useRouter();
-
-    const handleLogout = () => {
-        router.push("/");
-    };
-
-    const handleLogNewGame = () => {
-        router.push("/log-game");
-    };
 
     return (
         <div className={styles.dashboardContainer}>
-        <header className={styles.header}>
-            <h1 className={styles.title}>Pixel Pulse</h1>
-            <button className={styles.logoutButton} onClick={handleLogout}>
-            Log out
-            </button>
-        </header>
+            {isLoggedIn ? (
+                <>
+                    {/* Header with Title and Logout Button */}
+                    <header className={styles.header}>
+                        <h1 className={`pixelated-text ${styles.title}`}>Pixel Pulse</h1>
+                        {/* Link for Logout that redirects to the Home page */}
+                        <Link href="/" className={`pixelated-text ${styles.logoutButton}`}>
+                            Log out
+                        </Link>
+                    </header>
 
-        <button className={styles.newGameButton} onClick={handleLogNewGame}>
-            Log new game +
-        </button>
+                    {/* Button to Add a New Game */}
+                    <Link href="/log-game" className={`pixelated-text ${styles.newGameButton}`}>
+                        Log new game +
+                    </Link>
 
-        <section className={styles.gamesSection}>
-            <h2 className={styles.gamesTitle}>My Games</h2>
-            <div className={styles.gamesContainer}>
-            {games.map((game, index) => (
-                <div key={index} className={styles.gameCard}>
-                <h3 className={styles.gameTitle}>{game.title}</h3>
-                <p className={styles.gameDescription}>{game.description}</p>
-                <div className={styles.actions}>
-                    <span className={styles.editButton}>edit</span>
-                    <span className={styles.deleteButton}>🗑️</span>
-                </div>
-                </div>
-            ))}
-            </div>
-        </section>
+                    {/* Games List Section */}
+                    <section className={styles.gamesSection}>
+                        <h2 className={`pixelated-text ${styles.gamesTitle}`}>My Games</h2>
+                        <div className={styles.gamesContainer}>
+                            {games.map((game, index) => (
+                                <div key={index} className={styles.gameCard}>
+                                    <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
+                                    <p className={styles.gameDescription}>{game.description}</p>
+                                    <div className={styles.actions}>
+                                        <span className={`pixelated-text ${styles.editButton}`}>edit</span>
+                                        <span className={`pixelated-text ${styles.deleteButton}`}>🗑️</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </>
+            ) : (
+                <p className={`pixelated-text ${styles.notLoggedInMessage}`}>You are not logged in. Please log in to view your games.</p>
+            )}
         </div>
     );
-    }
+}

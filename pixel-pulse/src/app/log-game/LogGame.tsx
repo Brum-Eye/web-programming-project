@@ -23,7 +23,7 @@ import styles from "./LogGame.module.css";
             <h1 className={styles.title}>Add new game</h1>
             <form onSubmit={handleSubmit}>
             <div className={styles.formField}>
-                <label htmlFor="title">Title</label>
+                <label htmlFor="title" className={styles.label}>Title</label>
                 <input
                 id="title"
                 type="text"
@@ -35,7 +35,7 @@ import styles from "./LogGame.module.css";
             </div>
 
             <div className={styles.formField}>
-                <label>Star Rating</label>
+                <label className={styles.label}>Star Rating</label>
                 <div className={styles.starRating}>
                 {Array.from({ length: 5 }).map((_, index) => (
                     <span
@@ -54,7 +54,7 @@ import styles from "./LogGame.module.css";
             </div>
 
             <div className={styles.formField}>
-                <label htmlFor="review">Review</label>
+                <label htmlFor="review" className={styles.label}>Review</label>
                 <textarea
                 id="review"
                 value={review}
