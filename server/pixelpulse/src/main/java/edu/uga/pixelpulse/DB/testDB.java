@@ -43,7 +43,7 @@ public class testDB {
     public void addExample(int userID, String cardNumber, String expDate, String state,
             String street, String zipcode, String city) {
 
-        String sql = "INSERT INTO payment (user_id, card_number, exp_date, zipcode, street, city, state) " +
+        String sql = "INSERT INTO user (user_id, card_number, exp_date, zipcode, street, city, state) " +
                 "VALUES (?,?,?,?,?,?,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
