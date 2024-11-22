@@ -12,16 +12,15 @@ export default function SignupPage() {
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    // Perform sign-up logic here
     console.log('New user signed up:', { name, username, password });
     setName('');
     setUsername('');
     setPassword('');
-    router.push('/dashboard'); // Redirect to dashboard or another page
+    router.push('/dashboard'); 
   };
 
   const backToLoginHandler = () => {
-    router.push('/'); // Redirect to login page
+    router.push('/'); 
   };
 
   return (
