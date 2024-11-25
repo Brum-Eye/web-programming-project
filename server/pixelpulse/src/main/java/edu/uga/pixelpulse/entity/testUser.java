@@ -1,0 +1,1 @@
+// Here we put the getters and setters of the stuff we will add in
