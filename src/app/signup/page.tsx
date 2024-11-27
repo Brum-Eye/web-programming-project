@@ -31,7 +31,7 @@ export default function SignupPage() {
           <input
             className={styles.input}
             type="text"
-            placeholder="Full Name"
+            placeholder="Email"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
