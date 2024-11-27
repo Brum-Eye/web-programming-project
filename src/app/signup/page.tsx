@@ -5,46 +5,22 @@ import { useRouter } from 'next/navigation';
 import styles from './Signup.module.css';
 
 export default function SignupPage() {
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const submitHandler = async (e: React.FormEvent) => {
+  const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const userData = { name, username, password };
-
-    try {
-      const response = await fetch('http://localhost:3000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to sign up');
-      }
-
-      const data = await response.json();
-      console.log('User created successfully:', data);
-
-      setName('');
-      setUsername('');
-      setPassword('');
-
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Signup failed:', error);
-      alert('Signup failed. Please try again.');
-    }
+    console.log('New user signed up:', { name, username, password });
+    setEmail('');
+    setUsername('');
+    setPassword('');
+    router.push('/dashboard'); 
   };
 
   const backToLoginHandler = () => {
-    router.push('/');
+    router.push('/'); 
   };
 
   return (
@@ -55,9 +31,9 @@ export default function SignupPage() {
           <input
             className={styles.input}
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             className={styles.input}

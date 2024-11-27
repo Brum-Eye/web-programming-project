@@ -3,18 +3,22 @@ import User from '../models/User';
 
 const router = express.Router();
 
-// Create a user
+// Create a new user
 router.post('/', async (req: Request, res: Response) => {
-  try {
-    const { name, email, age } = req.body;
-    const user = new User({ name, email, age });
-    await user.save();
-    res.status(201).json(user);
-  } catch (error) {
-    const err = error as Error;
-    res.status(400).json({ message: err.message });
-  }
-});
+    try {
+      const { name, email, password } = req.body;
+  
+      // Create a new user instance
+      const newUser = new User({ name, email, password });
+  
+      // Save to the database
+      await newUser.save();
+  
+      res.status(201).json(newUser);
+    } catch (error) {
+      res.status(400).json({ message: error instanceof Error ? error.message : 'Unknown error occurred.' });
+    }
+  });
 
 // Get all users
 router.get('/', async (req: Request, res: Response) => {
