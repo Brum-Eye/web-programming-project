@@ -1,3 +1,5 @@
+// src/app/SignupPage.tsx (or wherever your component is)
+
 "use client";
 
 import { useState } from 'react';
@@ -8,19 +10,45 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const submitHandler = (e: React.FormEvent) => {
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('New user signed up:', { name, username, password });
-    setEmail('');
-    setUsername('');
-    setPassword('');
-    router.push('/dashboard'); 
+    
+    // Prepare user data
+    const userData = { email, username, password };
+
+    try {
+      // Send a POST request to the backend to create a new user
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        // Clear the form
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        
+        // Redirect to the dashboard
+        router.push('/dashboard');
+      } else {
+        const result = await response.json();
+        setError(result.message || 'Error creating user');
+      }
+    } catch (error) {
+      setError('An unexpected error occurred.');
+      console.error(error);
+    }
   };
 
   const backToLoginHandler = () => {
-    router.push('/'); 
+    router.push('/');
   };
 
   return (
@@ -49,6 +77,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && <div className={styles.error}>{error}</div>}
           <button type="submit" className={styles.button}>
             Sign Up
           </button>
