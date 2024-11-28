@@ -1,5 +1,3 @@
-// src/app/SignupPage.tsx (or wherever your component is)
-
 "use client";
 
 import { useState } from 'react';

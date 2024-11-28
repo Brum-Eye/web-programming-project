@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
-import styles from './Login.module.css';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './Login.module.css';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -12,9 +12,11 @@ export default function Login() {
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
+
+    console.log('Attempting to log in with:', { username, password });
 
     try {
-      // Send login request to the backend
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -32,10 +34,10 @@ export default function Login() {
       } else {
         const errorData = await response.json();
         console.error('Login failed:', errorData.message);
-        setError(errorData.message); // Display error
+        setError(errorData.message || 'Login failed. Please try again.');
       }
-    } catch (error) {
-      console.error('Error during login:', error);
+    } catch (err) {
+      console.error('Error during login:', err);
       setError('An unexpected error occurred. Please try again later.');
     }
   };
@@ -65,15 +67,9 @@ export default function Login() {
             className={styles.input}
           />
           {error && <div className={styles.error}>{error}</div>}
-          <div className={styles.options}>
-            <label className={styles.checkbox}>
-              <input type="checkbox" /> Remember Me
-            </label>
-            <a href="#" style={{ color: '#fff', textDecoration: 'underline' }}>
-              Forgot Password?
-            </a>
-          </div>
-          <button type="submit" className={styles.button}>Login</button>
+          <button type="submit" className={styles.button}>
+            Login
+          </button>
         </form>
       </div>
     </div>
