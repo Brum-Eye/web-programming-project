@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './Home.module.css';
-import Signup from './components/Signup';
+import Signup from './components/Login';
 
 type User = {
 id: number;
