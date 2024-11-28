@@ -26,16 +26,17 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
-        
-        // Redirect to a dashboard or homepage
+
+        // Redirect to the dashboard
         router.push('/dashboard');
       } else {
-        const result = await response.json();
-        setError(result.message || 'Login failed');
+        const errorData = await response.json();
+        console.error('Login failed:', errorData.message);
+        setError(errorData.message); // Display error
       }
     } catch (error) {
       console.error('Error during login:', error);
-      setError('An unexpected error occurred.');
+      setError('An unexpected error occurred. Please try again later.');
     }
   };
 
