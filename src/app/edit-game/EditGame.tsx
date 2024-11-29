@@ -1,9 +1,8 @@
-
 "use client";
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
-import styles from "./LogGame.module.css";
+import styles from "./EditGame.module.css";
 
 export default function LogGame() {
 const [title, setTitle] = useState("");
