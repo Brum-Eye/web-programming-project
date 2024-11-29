@@ -1,58 +1,103 @@
-
 "use client";
-import Link from 'next/link';
-import { useState } from 'react';
-import styles from './Dashboard.module.css';
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import styles from "./Dashboard.module.css";
+
+// Define the Game type
+interface Game {
+  _id: string;
+  title: string;
+  photo: string;
+  stars: number;
+  review: string;
+}
 
 export default function Dashboard() {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [games, setGames] = useState([
-        { title: "Game title", description: "Here will be the game review and any additional information the user wants to include.", image: "/images/pixel-pulse-logo.png" },
-        { title: "Game title", description: "Here will be the game review and any additional information the user wants to include.", image: "/images/pixel-pulse-logo.png" },
-        { title: "Game title", description: "Here will be the game review and any additional information the user wants to include.", image: "/images/pixel-pulse-logo.png" }
-    ]);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [games, setGames] = useState<Game[]>([]); // Use Game[] as the type for games
 
-    return (
-        <div className={styles.dashboardContainer}>
-            {isLoggedIn ? (
-                <>
-                    
-                    <header className={styles.header}>
-                        <h1 className={`pixelated-text ${styles.title}`}>Pixel Pulse</h1>
-                        
-                        <Link href="/" className={`pixelated-text ${styles.logoutButton}`}>
-                            Log out
-                        </Link>
-                    </header>
+  useEffect(() => {
+    // Fetch games from the API
+    const fetchGames = async () => {
+      try {
+        const response = await fetch("/api/logGame"); // Assuming the API route is `/api/game`
+        if (response.ok) {
+          const data = await response.json();
+          setGames(data); // TypeScript now knows this is Game[]
+        } else {
+          console.error("Failed to fetch games");
+        }
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    };
 
-                    
-                    <Link href="/log-game" className={`pixelated-text ${styles.newGameButton}`}>
-                        Log new game +
-                    </Link>
+    fetchGames();
+  }, []); // Fetch games only once when the component mounts
 
-                    
-                    <section className={styles.gamesSection}>
-                        <h2 className={`pixelated-text ${styles.gamesTitle}`}>My Games</h2>
-                        <div className={styles.gamesContainer}>
-                            {games.map((game, index) => (
-                                <div key={index} className={styles.gameCard}>
-                                    {game.image && (
-                                        <img src={game.image} alt={`${game.title} image`} className={styles.gameImage} />
-                                    )}
-                                    <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
-                                    <p className={styles.gameDescription}>{game.description}</p>
-                                    <div className={styles.actions}>
-                                        <span className={`pixelated-text ${styles.editButton}`}>edit</span>
-                                        <span className={`pixelated-text ${styles.deleteButton}`}>🗑️</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                </>
-            ) : (
-                <p className={`pixelated-text ${styles.notLoggedInMessage}`}>You are not logged in. Please log in to view your games.</p>
-            )}
-        </div>
-    );
+  return (
+    <div className={styles.dashboardContainer}>
+      {isLoggedIn ? (
+        <>
+          <header className={styles.header}>
+            <h1 className={`pixelated-text ${styles.title}`}>Pixel Pulse</h1>
+            <Link href="/" className={`pixelated-text ${styles.logoutButton}`}>
+              Log out
+            </Link>
+          </header>
+
+          <Link href="/log-game" className={`pixelated-text ${styles.newGameButton}`}>
+            Log new game +
+          </Link>
+
+          <section className={styles.gamesSection}>
+            <h2 className={`pixelated-text ${styles.gamesTitle}`}>My Games</h2>
+            <div className={styles.gamesContainer}>
+              {games.length > 0 ? (
+                games.map((game) => (
+                  <div key={game._id} className={styles.gameCard}>
+                    {game.photo && (
+                      <img
+                        src={game.photo}
+                        alt={`${game.title} image`}
+                        className={styles.gameImage}
+                      />
+                    )}
+                    <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
+                    <p className={styles.gameDescription}>{game.review}</p>
+
+                    {/* Display star rating */}
+                    <div className={styles.starRating}>
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            color: i < game.stars ? "#FFD700" : "#ccc", // Gold for filled stars
+                            fontSize: "1.2rem",
+                          }}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className={styles.actions}>
+                      <span className={`pixelated-text ${styles.editButton}`}>edit</span>
+                      <span className={`pixelated-text ${styles.deleteButton}`}>🗑️</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No games found. Log your first game!</p>
+              )}
+            </div>
+          </section>
+        </>
+      ) : (
+        <p className={`pixelated-text ${styles.notLoggedInMessage}`}>
+          You are not logged in. Please log in to view your games.
+        </p>
+      )}
+    </div>
+  );
 }
