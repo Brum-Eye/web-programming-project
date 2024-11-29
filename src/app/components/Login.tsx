@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './Login.module.css';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./Login.module.css";
 
 interface SignupProps {
   onAddUser?: (user: {
@@ -15,44 +15,54 @@ interface SignupProps {
 }
 
 export default function Signup({ onAddUser }: SignupProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-        console.log('Login successful:', data);
-
+        console.log("Login successful:", data);
+  
+        // Set login status in sessionStorage
+        sessionStorage.setItem("isGuest", "false");
+  
         // Redirect to dashboard on successful login
-        router.push('/dashboard');
+        router.push("/dashboard");
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Login failed. Please try again.');
+        setErrorMessage(errorData.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setErrorMessage('An error occurred. Please try again later.');
+      console.error("Login error:", error);
+      setErrorMessage("An error occurred. Please try again later.");
     }
-
+  
     // Clear the password field after submission
-    setPassword('');
+    setPassword("");
   };
+  
 
   const forgotPasswordHandler = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push('/forgotpassword');
+    router.push("/forgotpassword");
+  };
+
+  const continueAsGuestHandler = () => {
+    // Set a session flag for guest login
+    sessionStorage.setItem("isGuest", "true");
+    router.push("/dashboard");
   };
 
   return (
@@ -100,10 +110,18 @@ export default function Signup({ onAddUser }: SignupProps) {
         </form>
         <p
           className={styles.signupLink}
-          onClick={() => router.push('/signup')}
+          onClick={() => router.push("/signup")}
         >
           Sign Up
         </p>
+
+        {/* Add Continue as Guest Button */}
+        <button
+          className={`${styles.button} ${styles.guestButton}`}
+          onClick={continueAsGuestHandler}
+        >
+          Continue as Guest
+        </button>
       </div>
     </div>
   );
