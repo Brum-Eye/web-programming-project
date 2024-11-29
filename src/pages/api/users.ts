@@ -1,5 +1,3 @@
-// src/pages/api/users.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../lib/mongodb';
 import User from '../../models/User';

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import fs from 'fs'; // For file system operations
+import fs from 'fs'; // file system
 import path from 'path';
 
 interface Game extends Document {
