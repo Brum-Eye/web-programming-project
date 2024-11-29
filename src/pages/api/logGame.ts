@@ -39,6 +39,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error("Error fetching games:", error);
       return res.status(500).json({ message: "Error fetching games." });
     }
+  } else if (req.method === "DELETE") {
+    const { id } = req.query; // Get the ID from the query parameters
+
+    if (!id) {
+      return res.status(400).json({ message: "Game ID is required." });
+    }
+
+    try {
+      // Delete the game by ID
+      const deletedGame = await Game.findByIdAndDelete(id);
+
+      if (!deletedGame) {
+        return res.status(404).json({ message: "Game not found." });
+      }
+
+      return res.status(200).json({ message: "Game deleted successfully." });
+    } catch (error) {
+      console.error("Error deleting game:", error);
+      return res.status(500).json({ message: "Error deleting game." });
+    }
   } else {
     return res.status(405).json({ message: "Method not allowed." });
   }

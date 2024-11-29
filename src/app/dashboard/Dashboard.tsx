@@ -23,7 +23,7 @@ export default function Dashboard() {
         const response = await fetch("/api/logGame"); // Assuming the API route is `/api/game`
         if (response.ok) {
           const data = await response.json();
-          setGames(data); 
+          setGames(data);
         } else {
           console.error("Failed to fetch games");
         }
@@ -34,6 +34,26 @@ export default function Dashboard() {
 
     fetchGames();
   }, []); // Fetch games only once when the component mounts
+
+  // Delete game function
+  const deleteGame = async (id: string) => {
+    try {
+      const response = await fetch(`/api/logGame?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // Remove the deleted game from the local state
+        setGames(games.filter(game => game._id !== id));
+      } else {
+        const data = await response.json();
+        alert(data.message || "Error deleting game");
+      }
+    } catch (error) {
+      alert("Error deleting game");
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className={styles.dashboardContainer}>
@@ -83,7 +103,12 @@ export default function Dashboard() {
 
                     <div className={styles.actions}>
                       <span className={`pixelated-text ${styles.editButton}`}>edit</span>
-                      <span className={`pixelated-text ${styles.deleteButton}`}>🗑️</span>
+                      <span
+                        className={`pixelated-text ${styles.deleteButton}`}
+                        onClick={() => deleteGame(game._id)} // Call deleteGame on click
+                      >
+                        🗑️
+                      </span>
                     </div>
                   </div>
                 ))
