@@ -1,6 +1,8 @@
 "use client";
+
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'; 
 import styles from "./Dashboard.module.css";
 
 // Define the Game type
@@ -14,13 +16,14 @@ interface Game {
 
 export default function Dashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [games, setGames] = useState<Game[]>([]); // Use Game[] as the type for games
+  const [games, setGames] = useState<Game[]>([]); 
+  const router = useRouter();
 
   useEffect(() => {
     // Fetch games from the API
     const fetchGames = async () => {
       try {
-        const response = await fetch("/api/logGame"); // Assuming the API route is `/api/game`
+        const response = await fetch("/api/logGame"); 
         if (response.ok) {
           const data = await response.json();
           setGames(data);
@@ -33,7 +36,7 @@ export default function Dashboard() {
     };
 
     fetchGames();
-  }, []); // Fetch games only once when the component mounts
+  }, []); 
 
   // Delete game function
   const deleteGame = async (id: string) => {
@@ -92,7 +95,7 @@ export default function Dashboard() {
                         <span
                           key={i}
                           style={{
-                            color: i < game.stars ? "#FFD700" : "#ccc", // Gold for filled stars
+                            color: i < game.stars ? "#FFD700" : "#ccc", 
                             fontSize: "1.2rem",
                           }}
                         >
@@ -102,10 +105,12 @@ export default function Dashboard() {
                     </div>
 
                     <div className={styles.actions}>
-                      <span className={`pixelated-text ${styles.editButton}`}>edit</span>
+                      <Link href={`/edit-game?id=${game._id}`} className={`pixelated-text ${styles.editButton}`}>
+                        Edit
+                      </Link>
                       <span
                         className={`pixelated-text ${styles.deleteButton}`}
-                        onClick={() => deleteGame(game._id)} // Call deleteGame on click
+                        onClick={() => deleteGame(game._id)} 
                       >
                         🗑️
                       </span>
