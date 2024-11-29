@@ -59,6 +59,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error("Error deleting game:", error);
       return res.status(500).json({ message: "Error deleting game." });
     }
+  } else if (req.method === "PUT") {
+    const { id } = req.query; // Get the ID from the query parameters
+    const { title, photo, stars, review } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Game ID is required." });
+    }
+
+    try {
+      // Find the game by ID and update it with new values
+      const updatedGame = await Game.findByIdAndUpdate(
+        id,
+        { title, photo, stars, review },
+        { new: true } // Return the updated game document
+      );
+
+      if (!updatedGame) {
+        return res.status(404).json({ message: "Game not found." });
+      }
+
+      return res.status(200).json({ message: "Game updated successfully.", game: updatedGame });
+    } catch (error) {
+      console.error("Error updating game:", error);
+      return res.status(500).json({ message: "Error updating game." });
+    }
   } else {
     return res.status(405).json({ message: "Method not allowed." });
   }
