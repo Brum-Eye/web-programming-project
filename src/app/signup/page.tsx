@@ -33,8 +33,7 @@ export default function SignupPage() {
         setUsername('');
         setPassword('');
         
-        // Redirect to the dashboard
-        router.push('/dashboard');
+        router.push('/');
       } else {
         const result = await response.json();
         setError(result.message || 'Error creating user');
