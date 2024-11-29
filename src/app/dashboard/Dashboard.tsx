@@ -23,7 +23,7 @@ export default function Dashboard() {
         const response = await fetch("/api/logGame"); // Assuming the API route is `/api/game`
         if (response.ok) {
           const data = await response.json();
-          setGames(data); // TypeScript now knows this is Game[]
+          setGames(data); 
         } else {
           console.error("Failed to fetch games");
         }
