@@ -21,20 +21,20 @@ export default function Signup({ onAddUser }: SignupProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
-  // Function to handle successful login
+  
   const handleLoginSuccess = (token: string) => {
-    // Save the token in localStorage or cookies
+    
     if (rememberMe) {
       localStorage.setItem("authToken", token);
     } else {
-      sessionStorage.setItem("authToken", token); // Temporary storage for session
+      sessionStorage.setItem("authToken", token); 
     }
 
-    // Redirect to the dashboard
+    
     router.push("/dashboard");
   };
 
-  // Function to handle login form submission
+  
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -49,8 +49,8 @@ export default function Signup({ onAddUser }: SignupProps) {
         const data = await response.json();
         console.log("Login successful:", data);
 
-        // Call the login success handler and store the token
-        handleLoginSuccess(data.token); // Assuming the token is returned as 'data.token'
+        
+        handleLoginSuccess(data.token); 
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || "Login failed. Please try again.");
@@ -60,11 +60,9 @@ export default function Signup({ onAddUser }: SignupProps) {
       setErrorMessage("An error occurred. Please try again later.");
     }
 
-    // Clear the password field after submission
     setPassword("");
   };
 
-  // Handle forgot password click
   const forgotPasswordHandler = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push("/forgotpassword");
@@ -72,7 +70,6 @@ export default function Signup({ onAddUser }: SignupProps) {
 
   return (
     <div className={styles.container}>
-      {/* Top-right button */}
       <div className={styles.topRight}>
         <button
           className={styles.dashboardButton}

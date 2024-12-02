@@ -1,15 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../lib/mongodb';
 import Game from '../../models/Game';
-import authenticate from '../../lib/authMiddleware'; // Import the authentication middleware
+import authenticate from '../../lib/authMiddleware';
 
-// Protected route for handling POST, GET, DELETE, PUT requests
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectToDatabase();
 
-  // Apply authentication middleware only to POST, DELETE, and PUT methods
+  // Apply authentication middleware excluding GET
   if (req.method === 'POST' || req.method === 'DELETE' || req.method === 'PUT') {
-    const user = req.user; // This is where the user info is available after authentication
+    const user = req.user;
 
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -20,15 +19,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { title, photo, stars, review } = req.body;
 
     try {
-      // Ensure required fields are provided
       if (!title || !photo || !stars || !review) {
         return res.status(400).json({ message: 'All fields are required.' });
       }
 
-      // Create the game document
       const newGame = new Game({
         title,
-        photo, // Save the Base64 string directly
+        photo, //base64 string
         stars,
         review,
       });
@@ -42,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method === 'GET') {
     try {
-      // Fetch all games from the database
+      // Get all game reviews
       const games = await Game.find();
 
       return res.status(200).json(games);
@@ -51,14 +48,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(500).json({ message: 'Error fetching games.' });
     }
   } else if (req.method === 'DELETE') {
-    const { id } = req.query; // Get the ID from the query parameters
+    const { id } = req.query;
 
     if (!id) {
       return res.status(400).json({ message: 'Game ID is required.' });
     }
 
     try {
-      // Delete the game by ID
       const deletedGame = await Game.findByIdAndDelete(id);
 
       if (!deletedGame) {
@@ -71,7 +67,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(500).json({ message: 'Error deleting game.' });
     }
   } else if (req.method === 'PUT') {
-    const { id } = req.query; // Get the ID from the query parameters
+    const { id } = req.query; 
     const { title, photo, stars, review } = req.body;
 
     if (!id) {
@@ -79,11 +75,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      // Find the game by ID and update it with new values
+      // Update the selected game review
       const updatedGame = await Game.findByIdAndUpdate(
         id,
         { title, photo, stars, review },
-        { new: true } // Return the updated game document
+        { new: true } 
       );
 
       if (!updatedGame) {
@@ -100,5 +96,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Export the handler wrapped with the authentication middleware only for POST, DELETE, and PUT methods
 export default handler;

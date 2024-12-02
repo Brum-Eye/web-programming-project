@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from 'next/navigation'; // useSearchParams hook from next/navigation
+import { useSearchParams } from 'next/navigation';
 import styles from "./EditGame.module.css";
 
 export default function EditGame() {
-  const [title, setTitle] = useState<string>(""); // Ensure it starts as an empty string
-  const [rating, setRating] = useState<number>(0); // Ensure it starts as 0
-  const [review, setReview] = useState<string>(""); // Ensure it starts as an empty string
-  const [image, setImage] = useState<string | null>(null); // Ensure it starts as null
-  const [existingPhoto, setExistingPhoto] = useState<string | null>(null); // Ensure it starts as null
+  const [title, setTitle] = useState<string>(""); 
+  const [rating, setRating] = useState<number>(0); 
+  const [review, setReview] = useState<string>(""); 
+  const [image, setImage] = useState<string | null>(null); 
+  const [existingPhoto, setExistingPhoto] = useState<string | null>(null); 
   const searchParams = useSearchParams();
   const id = searchParams ? searchParams.get("id") : null;
 
@@ -20,10 +20,10 @@ export default function EditGame() {
           const response = await fetch(`/api/logGame?id=${id}`);
           if (response.ok) {
             const game = await response.json();
-            setTitle(game.title || ""); // Ensure it's always a string
-            setRating(game.stars || 0); // Ensure it's always a number
-            setReview(game.review || ""); // Ensure it's always a string
-            setExistingPhoto(game.photo || null); // Ensure it's either string or null
+            setTitle(game.title || ""); 
+            setRating(game.stars || 0); 
+            setReview(game.review || ""); 
+            setExistingPhoto(game.photo || null);
           } else {
             alert("Game not found");
           }
@@ -81,7 +81,7 @@ export default function EditGame() {
             <input
               id="title"
               type="text"
-              value={title || ""} // Ensure it’s always a string
+              value={title || ""} 
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter title here"
               className={styles.inputField}
@@ -132,7 +132,7 @@ export default function EditGame() {
             <label htmlFor="review" className={styles.label}>Review</label>
             <textarea
               id="review"
-              value={review || ""} // Ensure it's always a string
+              value={review || ""} 
               onChange={(e) => setReview(e.target.value)}
               placeholder="Leave review here"
               className={styles.inputField}

@@ -19,7 +19,7 @@ export default function Dashboard() {
   const [games, setGames] = useState<Game[]>([]); 
   const router = useRouter();
 
-  // Check if user is logged in when page loads
+  // Checks authentication of user
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
@@ -34,7 +34,7 @@ export default function Dashboard() {
 
           if (response.ok) {
             const data = await response.json();
-            setIsLoggedIn(data.isLoggedIn); // Update auth status
+            setIsLoggedIn(data.isLoggedIn); // authenticated
           } else {
             setIsLoggedIn(false);
           }
@@ -50,7 +50,6 @@ export default function Dashboard() {
     checkAuth();
   }, []);
 
-  // Fetch games from the API (for both logged in and non-logged in users)
   useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -60,7 +59,7 @@ export default function Dashboard() {
             ? {
                 Authorization: `Bearer ${localStorage.getItem("authToken") || sessionStorage.getItem("authToken")}`,
               }
-            : {}, // No authorization needed for non-logged in users
+            : {},
         });
 
         if (response.ok) {
@@ -77,7 +76,6 @@ export default function Dashboard() {
     fetchGames();
   }, [isLoggedIn]);
 
-  // Delete game function
   const deleteGame = async (id: string) => {
     const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
     if (!token) {
@@ -105,7 +103,6 @@ export default function Dashboard() {
     }
   };
 
-  // Log new game function
   const handleLogNewGame = () => {
     const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
     if (!token) {
@@ -115,13 +112,12 @@ export default function Dashboard() {
     router.push("/log-game");
   };
 
-  // Logout function
   const handleLogout = () => {
-    // Clear token from localStorage/sessionStorage
+    // When logging out clear token
     localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
 
-    // Redirect to login page
+    // Go back to login
     router.push("/");
   };
 
@@ -162,7 +158,6 @@ export default function Dashboard() {
                 <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
                 <p className={styles.gameDescription}>{game.review}</p>
 
-                {/* Display star rating */}
                 <div className={styles.starRating}>
                   {Array.from({ length: 5 }).map((_, i) => (
                     <span
@@ -177,7 +172,6 @@ export default function Dashboard() {
                   ))}
                 </div>
 
-                {/* Show edit and delete buttons only for logged-in users */}
                 {isLoggedIn && (
                   <div className={styles.actions}>
                     <Link

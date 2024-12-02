@@ -25,13 +25,6 @@ export default function ForgotPassword() {
             className={styles.input}
           />
           <input
-            type="text"
-            placeholder="Enter verification code"
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            className={styles.input}
-          />
-          <input
             type="password"
             placeholder="Enter new password"
             value={newPassword}

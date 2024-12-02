@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import fs from 'fs'; // file system
+import fs from 'fs';
 import path from 'path';
 
 interface Game extends Document {
@@ -16,11 +16,9 @@ const gameSchema = new Schema<Game>({
   review: { type: String, required: true },
 });
 
-// Middleware to handle Base64 conversion before saving
 gameSchema.pre('save', async function (next) {
   const game = this as Game;
 
-  // Ensure the `photo` field contains a file path before conversion
   if (fs.existsSync(game.photo)) {
     const filePath = path.resolve(game.photo);
     const fileBuffer = fs.readFileSync(filePath);

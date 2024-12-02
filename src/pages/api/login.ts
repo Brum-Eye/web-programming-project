@@ -4,15 +4,13 @@ import User from '../../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-// JWT Secret (make sure to store this securely in an environment variable)
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const JWT_SECRET = '33284af0ba6692cf71f0d469284a20f78a886b72a2268e07c067f1e036cef185';
 
-// Helper function to generate JWT token
 const generateToken = (user: { id: string; username: string }): string => {
   return jwt.sign(
     { id: user.id, username: user.username },
     JWT_SECRET,
-    { expiresIn: '1h' } // Set token expiration to 1 hour
+    { expiresIn: '1h' } // Token expires in 1 hour automatically
   );
 };
 
@@ -21,30 +19,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { username, password } = req.body;
 
     try {
-      // Connect to the database
       await connectToDatabase();
 
-      // Find user in the database
       const user = await User.findOne({ username });
 
       if (!user) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
 
-      // Compare the provided password with the stored hashed password
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
 
-      // Generate JWT token
       const token = generateToken(user);
 
-      // Successful login
       return res.status(200).json({
         message: 'Login successful',
-        token, // Send token to the client
+        token, 
         user: { id: user._id, username: user.username },
       });
     } catch (error) {

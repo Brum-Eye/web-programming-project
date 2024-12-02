@@ -8,13 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { name, username, email, password } = req.body;
   
       try {
-        // Connect to database
         await connectToDatabase();
   
-        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
   
-        // Create the user
         const newUser = new User({
           name,
           username,

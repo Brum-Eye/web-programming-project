@@ -14,11 +14,10 @@ export default function SignupPage() {
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Prepare user data
     const userData = { email, username, password };
 
     try {
-      // Send a POST request to the backend to create a new user
+      // Create new user API call
       const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
@@ -28,7 +27,7 @@ export default function SignupPage() {
       });
 
       if (response.ok) {
-        // Clear the form
+        // Clear form
         setEmail('');
         setUsername('');
         setPassword('');

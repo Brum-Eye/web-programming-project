@@ -29,7 +29,6 @@ export default function LogGame() {
       reader.onloadend = async () => {
         const photoBase64 = reader.result;
 
-        // Send data to the backend
         const response = await fetch("/api/logGame", {
           method: "POST",
           headers: {
@@ -37,7 +36,7 @@ export default function LogGame() {
           },
           body: JSON.stringify({
             title,
-            photo: photoBase64, // Send Base64 encoded image
+            photo: photoBase64, 
             stars: rating,
             review,
           }),
