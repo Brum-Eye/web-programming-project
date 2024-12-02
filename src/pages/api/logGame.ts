@@ -1,5 +1,3 @@
-// src/pages/api/logGame.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../lib/mongodb';
 import Game from '../../models/Game';
@@ -9,11 +7,13 @@ import authenticate from '../../lib/authMiddleware'; // Import the authenticatio
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectToDatabase();
 
-  // Access the authenticated user
-  const user = req.user; // This is where the user info is available after authentication
+  // Apply authentication middleware only to POST, DELETE, and PUT methods
+  if (req.method === 'POST' || req.method === 'DELETE' || req.method === 'PUT') {
+    const user = req.user; // This is where the user info is available after authentication
 
-  if (!user) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
   }
 
   if (req.method === 'POST') {
@@ -100,5 +100,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Export the handler wrapped with the authentication middleware
-export default authenticate(handler);
+// Export the handler wrapped with the authentication middleware only for POST, DELETE, and PUT methods
+export default handler;

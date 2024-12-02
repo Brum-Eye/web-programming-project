@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || '33284af0ba6692cf71f0d469284a20f78a886b72a2268e07c067f1e036cef185';
 
 const verifyToken = (token: string) => {
   try {

@@ -50,20 +50,17 @@ export default function Dashboard() {
     checkAuth();
   }, []);
 
-  // Fetch games from the API when logged in
+  // Fetch games from the API (for both logged in and non-logged in users)
   useEffect(() => {
     const fetchGames = async () => {
-      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-      if (!token) {
-        return;
-      }
-
       try {
         const response = await fetch("/api/logGame", {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: isLoggedIn
+            ? {
+                Authorization: `Bearer ${localStorage.getItem("authToken") || sessionStorage.getItem("authToken")}`,
+              }
+            : {}, // No authorization needed for non-logged in users
         });
 
         if (response.ok) {
@@ -77,9 +74,7 @@ export default function Dashboard() {
       }
     };
 
-    if (isLoggedIn) {
-      fetchGames();
-    }
+    fetchGames();
   }, [isLoggedIn]);
 
   // Delete game function
@@ -110,6 +105,16 @@ export default function Dashboard() {
     }
   };
 
+  // Log new game function
+  const handleLogNewGame = () => {
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    if (!token) {
+      alert("You need to log in to add a new game.");
+      return;
+    }
+    router.push("/log-game");
+  };
+
   // Logout function
   const handleLogout = () => {
     // Clear token from localStorage/sessionStorage
@@ -132,73 +137,70 @@ export default function Dashboard() {
         </button>
       </header>
 
-      {isLoggedIn ? (
-        <>
-          <Link
-            href="/log-game"
-            className={`pixelated-text ${styles.newGameButton}`}
-          >
-            Log new game +
-          </Link>
-
-          <section className={styles.gamesSection}>
-            <h2 className={`pixelated-text ${styles.gamesTitle}`}>My Games</h2>
-            <div className={styles.gamesContainer}>
-              {games.length > 0 ? (
-                games.map((game) => (
-                  <div key={game._id} className={styles.gameCard}>
-                    {game.photo && (
-                      <img
-                        src={game.photo}
-                        alt={`${game.title} image`}
-                        className={styles.gameImage}
-                      />
-                    )}
-                    <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
-                    <p className={styles.gameDescription}>{game.review}</p>
-
-                    {/* Display star rating */}
-                    <div className={styles.starRating}>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <span
-                          key={i}
-                          style={{
-                            color: i < game.stars ? "#FFD700" : "#ccc", 
-                            fontSize: "1.2rem",
-                          }}
-                        >
-                          ★
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className={styles.actions}>
-                      <Link
-                        href={`/edit-game?id=${game._id}`}
-                        className={`pixelated-text ${styles.editButton}`}
-                      >
-                        Edit
-                      </Link>
-                      <span
-                        className={`pixelated-text ${styles.deleteButton}`}
-                        onClick={() => deleteGame(game._id)} 
-                      >
-                        🗑️
-                      </span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No games found. Log your first game!</p>
-              )}
-            </div>
-          </section>
-        </>
-      ) : (
-        <p className={`pixelated-text ${styles.notLoggedInMessage}`}>
-          You are not logged in. Please log in to view and manage your games.
-        </p>
+      {isLoggedIn && (
+        <button
+          className={`pixelated-text ${styles.newGameButton}`}
+          onClick={handleLogNewGame}
+        >
+          Log new game +
+        </button>
       )}
+
+      <section className={styles.gamesSection}>
+        <h2 className={`pixelated-text ${styles.gamesTitle}`}>Game Reviews</h2>
+        <div className={styles.gamesContainer}>
+          {games.length > 0 ? (
+            games.map((game) => (
+              <div key={game._id} className={styles.gameCard}>
+                {game.photo && (
+                  <img
+                    src={game.photo}
+                    alt={`${game.title} image`}
+                    className={styles.gameImage}
+                  />
+                )}
+                <h3 className={`pixelated-text ${styles.gameTitle}`}>{game.title}</h3>
+                <p className={styles.gameDescription}>{game.review}</p>
+
+                {/* Display star rating */}
+                <div className={styles.starRating}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        color: i < game.stars ? "#FFD700" : "#ccc", 
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
+                {/* Show edit and delete buttons only for logged-in users */}
+                {isLoggedIn && (
+                  <div className={styles.actions}>
+                    <Link
+                      href={`/edit-game?id=${game._id}`}
+                      className={`pixelated-text ${styles.editButton}`}
+                    >
+                      Edit
+                    </Link>
+                    <span
+                      className={`pixelated-text ${styles.deleteButton}`}
+                      onClick={() => deleteGame(game._id)} 
+                    >
+                      🗑️
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No games found. Log your first game!</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
