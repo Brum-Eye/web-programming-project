@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from "next/navigation"; 
 import styles from "./Dashboard.module.css";
 
 // Define the Game type
@@ -15,15 +15,57 @@ interface Game {
 }
 
 export default function Dashboard() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [games, setGames] = useState<Game[]>([]); 
   const router = useRouter();
 
+  // Check if user is logged in when page loads
   useEffect(() => {
-    // Fetch games from the API
+    const checkAuth = async () => {
+      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+      if (token) {
+        try {
+          const response = await fetch("/api/auth/status", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setIsLoggedIn(data.isLoggedIn); // Update auth status
+          } else {
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          console.error("Error checking auth status:", error);
+          setIsLoggedIn(false);
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Fetch games from the API when logged in
+  useEffect(() => {
     const fetchGames = async () => {
+      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+      if (!token) {
+        return;
+      }
+
       try {
-        const response = await fetch("/api/logGame"); 
+        const response = await fetch("/api/logGame", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (response.ok) {
           const data = await response.json();
           setGames(data);
@@ -35,18 +77,28 @@ export default function Dashboard() {
       }
     };
 
-    fetchGames();
-  }, []); 
+    if (isLoggedIn) {
+      fetchGames();
+    }
+  }, [isLoggedIn]);
 
   // Delete game function
   const deleteGame = async (id: string) => {
+    const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    if (!token) {
+      alert("You need to log in to delete games.");
+      return;
+    }
+
     try {
       const response = await fetch(`/api/logGame?id=${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
-        // Remove the deleted game from the local state
         setGames(games.filter(game => game._id !== id));
       } else {
         const data = await response.json();
@@ -58,18 +110,34 @@ export default function Dashboard() {
     }
   };
 
+  // Logout function
+  const handleLogout = () => {
+    // Clear token from localStorage/sessionStorage
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
+
+    // Redirect to login page
+    router.push("/");
+  };
+
   return (
     <div className={styles.dashboardContainer}>
+      <header className={styles.header}>
+        <h1 className={`pixelated-text ${styles.title}`}>Pixel Pulse</h1>
+        <button
+          className={`pixelated-text ${styles.logoutButton}`}
+          onClick={handleLogout}
+        >
+          {isLoggedIn ? "Log out" : "Log in"}
+        </button>
+      </header>
+
       {isLoggedIn ? (
         <>
-          <header className={styles.header}>
-            <h1 className={`pixelated-text ${styles.title}`}>Pixel Pulse</h1>
-            <Link href="/" className={`pixelated-text ${styles.logoutButton}`}>
-              Log out
-            </Link>
-          </header>
-
-          <Link href="/log-game" className={`pixelated-text ${styles.newGameButton}`}>
+          <Link
+            href="/log-game"
+            className={`pixelated-text ${styles.newGameButton}`}
+          >
             Log new game +
           </Link>
 
@@ -105,7 +173,10 @@ export default function Dashboard() {
                     </div>
 
                     <div className={styles.actions}>
-                      <Link href={`/edit-game?id=${game._id}`} className={`pixelated-text ${styles.editButton}`}>
+                      <Link
+                        href={`/edit-game?id=${game._id}`}
+                        className={`pixelated-text ${styles.editButton}`}
+                      >
                         Edit
                       </Link>
                       <span
@@ -125,7 +196,7 @@ export default function Dashboard() {
         </>
       ) : (
         <p className={`pixelated-text ${styles.notLoggedInMessage}`}>
-          You are not logged in. Please log in to view your games.
+          You are not logged in. Please log in to view and manage your games.
         </p>
       )}
     </div>

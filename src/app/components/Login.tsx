@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './Login.module.css';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./Login.module.css";
 
 interface SignupProps {
   onAddUser?: (user: {
@@ -15,48 +15,73 @@ interface SignupProps {
 }
 
 export default function Signup({ onAddUser }: SignupProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
+  // Function to handle successful login
+  const handleLoginSuccess = (token: string) => {
+    // Save the token in localStorage or cookies
+    if (rememberMe) {
+      localStorage.setItem("authToken", token);
+    } else {
+      sessionStorage.setItem("authToken", token); // Temporary storage for session
+    }
+
+    // Redirect to the dashboard
+    router.push("/dashboard");
+  };
+
+  // Function to handle login form submission
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Login successful:', data);
+        console.log("Login successful:", data);
 
-        // Redirect to dashboard on successful login
-        router.push('/dashboard');
+        // Call the login success handler and store the token
+        handleLoginSuccess(data.token); // Assuming the token is returned as 'data.token'
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Login failed. Please try again.');
+        setErrorMessage(errorData.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setErrorMessage('An error occurred. Please try again later.');
+      console.error("Login error:", error);
+      setErrorMessage("An error occurred. Please try again later.");
     }
 
     // Clear the password field after submission
-    setPassword('');
+    setPassword("");
   };
 
+  // Handle forgot password click
   const forgotPasswordHandler = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push('/forgotpassword');
+    router.push("/forgotpassword");
   };
 
   return (
     <div className={styles.container}>
+      {/* Top-right button */}
+      <div className={styles.topRight}>
+        <button
+          className={styles.dashboardButton}
+          onClick={() => router.push("/dashboard")}
+        >
+          Go to Dashboard
+        </button>
+      </div>
+
       <div className={styles.formWrapper}>
         <h1 className={styles.title}>Pixel Pulse Login</h1>
         <form onSubmit={submitHandler}>
@@ -100,7 +125,7 @@ export default function Signup({ onAddUser }: SignupProps) {
         </form>
         <p
           className={styles.signupLink}
-          onClick={() => router.push('/signup')}
+          onClick={() => router.push("/signup")}
         >
           Sign Up
         </p>
