@@ -10,9 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST' || req.method === 'DELETE' || req.method === 'PUT') {
     const user = req.user;
 
-    if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
+    
   }
 
   if (req.method === 'POST') {

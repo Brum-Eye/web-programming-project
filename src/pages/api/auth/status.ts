@@ -1,22 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { verifyToken } from "../../../utils/auth";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    const token = req.headers.authorization?.split(" ")[1];
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({ isLoggedIn: false });
-    }
-
-    const user = verifyToken(token);
-
-    if (!user) {
-      return res.status(403).json({ isLoggedIn: false });
-    }
-
-    return res.status(200).json({ isLoggedIn: true });
+  if (!token) {
+    return res.status(401).json({ isLoggedIn: false });
   }
 
-  res.status(405).json({ message: "Method Not Allowed" });
+  const user = verifyToken(token);
+
+  if (!user) {
+    return res.status(401).json({ isLoggedIn: false });
+  }
+
+  return res.status(200).json({ isLoggedIn: true });
 }

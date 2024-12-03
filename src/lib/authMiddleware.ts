@@ -13,9 +13,8 @@ const verifyToken = (token: string) => {
 
 const authenticate = (handler: any) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-
     const token = req.headers.authorization?.split(" ")[1]; 
-
+    
     if (!token) {
       return res.status(401).json({ message: 'Authentication required' });
     }
@@ -26,10 +25,11 @@ const authenticate = (handler: any) => {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
 
-    req.user = user;
+    req.user = user; 
 
     return handler(req, res);
   };
 };
+
 
 export default authenticate;

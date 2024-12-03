@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LogGame.module.css";
 
@@ -10,38 +10,80 @@ export default function LogGame() {
   const [review, setReview] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+      if (token) {
+        try {
+          const response = await fetch("/api/auth/status", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setIsLoggedIn(data.isLoggedIn);
+          } else {
+            setIsLoggedIn(false);
+            router.push("/"); 
+          }
+        } catch (error) {
+          console.error("Error checking auth status:", error);
+          setIsLoggedIn(false);
+          router.push("/"); 
+        }
+      } else {
+        setIsLoggedIn(false);
+        router.push("/"); 
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
+  
     if (!title || !rating || !review || !image) {
       setError("Please fill in all fields and upload an image.");
       return;
     }
-
+  
     try {
       // Convert the image file to Base64
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onloadend = async () => {
         const photoBase64 = reader.result;
-
+  
+        const token = localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+  
+        if (!token) {
+          setError("No authentication token found.");
+          return;
+        }
+  
         const response = await fetch("/api/logGame", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title,
-            photo: photoBase64, 
+            photo: photoBase64,
             stars: rating,
             review,
           }),
         });
-
+  
         if (response.ok) {
           setTitle("");
           setRating(0);
@@ -58,6 +100,7 @@ export default function LogGame() {
       setError("An unexpected error occurred. Please try again.");
     }
   };
+  
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,6 +108,10 @@ export default function LogGame() {
       setImage(file);
     }
   };
+
+  if (!isLoggedIn) {
+    return null; 
+  }
 
   return (
     <div className={styles.pageBackground}>
